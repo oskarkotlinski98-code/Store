@@ -8,11 +8,39 @@ namespace Store
 {
     public class ShoppingCart
     {
-        public List<Product> listOfProducts = new List<Product>();
+        private List<Product> listOfProducts = new List<Product>(); 
 
         public void AddProduct(Product product, int amount = 1)
         {
             listOfProducts.Add(product);
+        }
+        public void RemoveProduct(Product product, int amount = 1)
+        {
+            if (listOfProducts.Contains(product))
+            {
+                listOfProducts.Remove(product);
+            }
+            else
+            {
+                Console.WriteLine("Product not found in cart");
+            }
+
+        }
+        public void ShowItemsInCart()
+        {
+            if (listOfProducts.Count == 0)
+            {
+                Console.WriteLine("Your cart is empty");
+                return;
+            }
+
+
+
+            Console.WriteLine("These are the items in your cart!");
+            foreach (Product p in listOfProducts)
+            {
+                p.CartInfo();
+            }
         }
     }
 }

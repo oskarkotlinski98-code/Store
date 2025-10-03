@@ -4,9 +4,9 @@
     {
         static void Main(string[] args)
         {
-
+            Store store = new Store();
             Menu.LoadExistingCustomers();
-            Menu.Show();
+            Menu.Show(store);
             
 
         }

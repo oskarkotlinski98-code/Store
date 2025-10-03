@@ -28,6 +28,10 @@ namespace Store
         {
             Console.WriteLine($"{ProductName} costs {Price} (In Stock :{Quantity}");
         }
+        public virtual void CartInfo()
+        {
+            Console.WriteLine($"{ProductName} by {Brand} costs {Price}");
+        }
         
 
     public void QuantityMinus(int q)

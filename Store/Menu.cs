@@ -11,7 +11,7 @@ namespace Store
         static string filePath = "users.txt";
 
 
-        public static void Show()
+        public static void Show(Store store)
         {
             bool usingStore = true;
             while (usingStore)
@@ -25,7 +25,12 @@ namespace Store
                         RegisterCustomer();
                         break;
                     case "2":
-                        LogInUser();
+                        Customer LoggedIn = LogInUser();
+                        { if (LoggedIn != null)
+                            {
+                                StoreMenu(LoggedIn,store);
+                            }
+                        }
                         break;
                     case "3":
                         break;
@@ -76,13 +81,15 @@ namespace Store
             return new Customer(username, password, money);
         }
 
-        static void LogInUser()
+        public static Customer LogInUser()
         {
+            
+            bool userFound = false;
             if (!File.Exists(filePath))
             {
                 Console.WriteLine("No user exists. Please register! , press any key to continue");
                 Console.ReadKey();
-                return;
+                return null;
 
             }
 
@@ -91,26 +98,29 @@ namespace Store
             Console.WriteLine("Enter your password");
             string password = Console.ReadLine();
 
-            bool userFound = false;
+            
             foreach (var line in File.ReadAllLines(filePath))
             {
                 var parts = line.Split('|');
-                if (parts.Length == 2 && parts[0] == username && parts[1] == password)
+                if (parts.Length == 3 && parts[0] == username && parts[1] == password)
                 {
                     userFound = true;
-                    break;
+                    Console.WriteLine("Login successful, press any key to continue");
+                    Console.ReadKey();
+                    
+                    return new Customer(parts[0], parts[1], Convert.ToDecimal(parts[2]));
+                    
 
                 }
+                
             }
-            if (userFound)
+            if (!userFound)
             {
-                Console.WriteLine("Login succesfull , press any button to continue");
+                Console.WriteLine("User not found or incorrect password, press any key to continue");
                 Console.ReadKey();
             }
-            else
-            {
-                Console.WriteLine("Login failed try again");
-            }
+            return null;
+
         }
 
         static bool DoesUserExist(string username)
@@ -144,26 +154,53 @@ namespace Store
             
         }
 
-        public static void StoreMenu()
+        public static void StoreMenu(Customer c,Store s)
         {
             bool isInStore = true;
 
             while (isInStore)
             {
+                Console.Clear();
                 Console.WriteLine("Where would you like to go ");
-                Console.WriteLine("[1].Meat section.\n[2].Drink section.\n[3].Snack section\n Exit to login");
+                Console.WriteLine("[1].Meat section.\n[2].Drink section.\n[3].Snack section\n[4].Show Cart\n[5].Exit to login");
                 string storeChoice = Console.ReadLine();
 
                 switch (storeChoice)
                 {
                     case "1":
+                        Console.WriteLine("Welcome to the meat section");
+                        Console.WriteLine("These are the items present in this section");
+                        foreach(Meat m in s.Inventory)
+                        {
+                            m.DisplayInfo();
+                        }
+
                         break;
                     case "2":
+                        Console.WriteLine("Welcome to the Drink section");
+                        Console.WriteLine("These are the items present in this section");
+                        foreach (Drink d in s.Inventory)
+                        {
+                            d.DisplayInfo();
+                        }
                         break;
                     case "3":
+                        Console.WriteLine("Welcome to the Snack section");
+                        Console.WriteLine("These are the items present in this section");
+                        foreach (Snack sn in s.Inventory)
+                        {
+                            sn.DisplayInfo();
+                        }
                         break;
                     case "4":
+                        c.shoppingCart.ShowItemsInCart();
                         break;
+                    case "5":
+                        Console.WriteLine("You've exited to login menu, press any key to continue");
+                        Console.ReadKey();
+                        isInStore = false;
+                        break;
+                        
 
                 }
             }

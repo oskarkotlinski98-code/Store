@@ -12,10 +12,12 @@ namespace Store
         public string Name { get; private set; }
         public string Password { get; private set; }
         public decimal Money { get; private set; }
+        
+        
 
         public static int NumberOfCustomers { get; private set; } = 0;
 
-        private ShoppingCart shoppingCart = new ShoppingCart();
+        public ShoppingCart shoppingCart = new ShoppingCart();
 
        
 

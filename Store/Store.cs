@@ -8,6 +8,7 @@ namespace Store
 {
     public class Store
     {
+        
         public List<Product> Inventory { get; private set; } = new List<Product>();
 
         public void AddProduct(Product product)
